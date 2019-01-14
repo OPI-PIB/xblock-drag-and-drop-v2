@@ -200,10 +200,6 @@ class DragAndDropBlock(
     )
 
     block_settings_key = 'drag-and-drop-v2'
-    
-    icon_class = "problem"
-    
-    self.icon_class = "problem"
 
     def max_score(self):  # pylint: disable=no-self-use
         """
@@ -292,8 +288,6 @@ class DragAndDropBlock(
             'public/js/vendor/virtual-dom-1.3.0.min.js',
             'public/js/drag_and_drop.js',
         ]
-        
-        icon_class = 'problem'
 
         statici18n_js_url = self._get_statici18n_js_url()
         if statici18n_js_url:
@@ -361,7 +355,6 @@ class DragAndDropBlock(
             "target_img_description": self.target_img_description,
             "item_background_color": self.item_background_color or None,
             "item_text_color": self.item_text_color or None,
-            "icon_class": self.icon_class
             # final feedback (data.feedback.finish) is not included - it may give away answers.
         }
 
