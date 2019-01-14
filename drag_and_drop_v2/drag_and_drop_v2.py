@@ -357,6 +357,7 @@ class DragAndDropBlock(
             "target_img_description": self.target_img_description,
             "item_background_color": self.item_background_color or None,
             "item_text_color": self.item_text_color or None,
+            "icon_class": self.icon_class
             # final feedback (data.feedback.finish) is not included - it may give away answers.
         }
 
