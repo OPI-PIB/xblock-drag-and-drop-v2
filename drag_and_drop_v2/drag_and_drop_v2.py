@@ -200,6 +200,8 @@ class DragAndDropBlock(
     )
 
     block_settings_key = 'drag-and-drop-v2'
+    
+    icon_class = 'problem'
 
     def max_score(self):  # pylint: disable=no-self-use
         """
