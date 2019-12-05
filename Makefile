@@ -48,7 +48,7 @@ build_dummy_translations: dummy_translations compile_translations ## generate an
 validate_translations: build_dummy_translations detect_changed_source_translations ## validate translations
 
 pull_translations: ## pull translations from transifex
-	cd $(WORKING_DIR) && i18n_tool transifex pull
+	cd $(WORKING_DIR) && i18n_tool transifex pull_all
 
 push_translations: ## push translations to transifex
 	cd $(WORKING_DIR) && i18n_tool transifex push
