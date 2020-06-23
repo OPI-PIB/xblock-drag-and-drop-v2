@@ -66,10 +66,11 @@ function DragAndDropTemplates(configuration) {
 
     var itemContentTemplate = function(item) {
         var item_content_html = gettext(item.displayName);
-        if (item.imageURL) {
-            item_content_html = '<img src="' + item.imageURL + '" alt="' + item.imageDescription + '" />';
-        }
         var key = item.value + '-content';
+        if (item.imageURL) {
+            item_content_html = '<img src="' + item.imageURL + '" alt="' + item.imageDescription + '" />' + '<div>' + item_content_html + '</div>';
+        }
+        
         return h('div', { key: key, innerHTML: item_content_html, className: "item-content" });
     };
 
@@ -203,7 +204,7 @@ function DragAndDropTemplates(configuration) {
         style.visibility = 'hidden';
         return (
             h(
-                'div.option',
+                'div.option.d-none',
                 {
                     key: 'placeholder-' + item.value,
                     className: className,
@@ -276,16 +277,31 @@ function DragAndDropTemplates(configuration) {
         );
     };
 
+    var feedbackStart = function(ctx) {
+        var messages = ctx.overall_feedback_messages || [];
+        var feedback_messages = messages.map(function(message) {
+            if (message.message_class == null) {
+                return h("p", {innerHTML: gettext(message.message)}, []);
+            }
+        });
+        return h("div.feedback_start",{}, gettext(feedback_messages)); 
+    };    
+
+
+
     var feedbackTemplate = function(ctx) {
         var messages = ctx.overall_feedback_messages || [];
         var feedback_display = messages.length > 0 ? 'block' : 'none';
         var feedback_messages = messages.map(function(message) {
             var selector = "p.message";
-            if (message.message_class) {
-                selector += "."+message.message_class;
+            if (message.message_class !== null) {
+                selector += "."+message.message_class 
+                
+                 return h(selector, {innerHTML: gettext(message.message)}, []);
             }
-            return h(selector, {innerHTML: gettext(message.message)}, []);
+           
         });
+
 
         return (
             h('div.feedback', {attributes: {'role': 'group', 'aria-label': gettext('Feedback')}}, [
@@ -354,17 +370,22 @@ function DragAndDropTemplates(configuration) {
                 h('span.sr', gettext('Submitting'))
             ]);
         }
+        else {
+            submitSpinner = h('i.fas.fa-check', {attributes: {'aria-hidden': true}})
+        }
 
         return (
             h("div.action-toolbar-item.submit-answer", {}, [
                 h(
-                    "button.btn-brand.submit-answer-button",
+                    "button.btn.btn-primary.btn-sm.submit-answer-button.mb-1",
                     submitButtonProperties,
                     [
                         submitSpinner,
                         ' ',  // whitespace between spinner icon and text
                         gettext("Submit")
                     ]
+
+
                 ),
                 attemptsUsedInfo
             ])
@@ -379,13 +400,13 @@ function DragAndDropTemplates(configuration) {
         return (
             h('span.sidebar-button-wrapper', {}, [
                 h(
-                    'button.unbutton.btn-default.btn-small',
+                    'button.btn.btn-outline-primary.btn-sm.mb-1',
                     {
                         className: buttonClass,
                         disabled: options.disabled || options.spinner || false
                     },
                     [
-                        h("span.btn-icon.fa", {className: iconClass, attributes: {"aria-hidden": true}}),
+                        h("i.icon.fa.fa-refresh", {className: iconClass, attributes: {"aria-hidden": true}}),
                         buttonText
                     ]
                 )
@@ -393,11 +414,11 @@ function DragAndDropTemplates(configuration) {
         );
     };
 
-    var sidebarTemplate = function(ctx) {
+    var sidebarTemplate = function(ctx, item) {
         var showAnswerButton = null;
         if (ctx.show_show_answer) {
             var options = {
-                disabled: ctx.showing_answer ? true : ctx.disable_show_answer_button,
+
                 spinner: ctx.show_answer_spinner
             };
             showAnswerButton = sidebarButtonTemplate(
@@ -405,14 +426,16 @@ function DragAndDropTemplates(configuration) {
                 "fa-info-circle",
                 gettext('Show Answer'),
                 options
+                
             );
+
         }
         var go_to_beginning_button_class = 'go-to-beginning-button';
         if (!ctx.show_go_to_beginning_button) {
             go_to_beginning_button_class += ' sr';
         }
         return(
-            h("div.action-toolbar-item.sidebar-buttons", {}, [
+            h("div.action-toolbar-item.sidebar-buttons.float-md-right.float-left", {}, [
                 sidebarButtonTemplate(
                     go_to_beginning_button_class,
                     "fa-arrow-up",
@@ -430,12 +453,15 @@ function DragAndDropTemplates(configuration) {
         )
     };
 
-    var itemFeedbackPopupTemplate = function(ctx) {
+    var itemFeedbackPopupTemplate = function(ctx,item) {
         var popupSelector = 'div.popup.item-feedback-popup.popup-wrapper';
         var msgs = ctx.feedback_messages || [];
         var have_messages = msgs.length > 0;
         var popup_content;
+        var item_content_html = gettext(ctx.displayName);
 
+       
+        
         if (msgs.length > 0 && !ctx.last_action_correct) {
             popupSelector += '.popup-incorrect';
         }
@@ -454,14 +480,18 @@ function DragAndDropTemplates(configuration) {
                 have_messages ? content_items : []
             );
         } else {
-            popup_content = h(
-                ctx.last_action_correct ? "div.popup-content" : "div.popup-content.popup-content-incorrect",
+            popup_content = [  
+            h(ctx.last_action_correct ? "div.popup-content" : "div.popup-content.popup-content-incorrect",
                 {},
-                msgs.map(function(message) {
-                    return h("p", {innerHTML: gettext(message.message)});
-                })
-            );
+                  msgs.map(function(message) { 
+                       return h("p", {innerHTML:  gettext(message.message)});
+                }))
+            ];
         }
+
+      
+      
+
 
         var popup_style = {};
         if (!have_messages) {
@@ -618,7 +648,7 @@ function DragAndDropTemplates(configuration) {
         var items_in_bank = [];
         var items_dragged = [];
         var items_placed = [];
-        ctx.items.forEach(function(item) {
+         ctx.items.forEach(function(item) {
             if (item.is_dragged) {
                 items_dragged.push(item);
                 // Dragged items require a placeholder in the bank.
@@ -681,6 +711,7 @@ function DragAndDropTemplates(configuration) {
                     problemHeader,
                     h('p', {innerHTML: ctx.problem_html}),
                 ]),
+                feedbackStart(ctx),
                 h('div.drag-container', {style: drag_container_style}, [
                     h('div.item-bank', item_bank_properties, bank_children),
                     h('div.target', {attributes: {'role': 'group', 'arial-label': gettext('Drop Targets')}}, [
@@ -700,6 +731,7 @@ function DragAndDropTemplates(configuration) {
                     (ctx.show_submit_answer ? submitAnswerTemplate(ctx) : null),
                     sidebarTemplate(ctx),
                 ]),
+                
                 keyboardHelpPopupTemplate(ctx),
                 feedbackTemplate(ctx),
                 h('div.sr.reader-feedback-area', {
@@ -1769,15 +1801,18 @@ function DragAndDropBlock(runtime, element, configuration) {
         });
     };
 
-    var showAnswer = function(evt) {
+    var showAnswer = function(evt, item) {
         evt.preventDefault();
         state.show_answer_spinner = true;
         applyState();
-
+    
         $.ajax({
             type: 'POST',
             url: runtime.handlerUrl(element, 'show_answer'),
             data: '{}',
+            success: function(response) {
+                $('#response').text(item.displayName);
+            }
         }).done(function(data) {
             state.items = data.items;
             state.showing_answer = true;
@@ -1935,6 +1970,7 @@ function DragAndDropBlock(runtime, element, configuration) {
             last_action_correct: state.last_action_correct,
             item_bank_focusable: item_bank_focusable,
             feedback_messages: state.feedback,
+            val: state.val,
             overall_feedback_messages: state.overall_feedback,
             disable_reset_button: !canReset(),
             disable_show_answer_button: !canShowAnswer(),

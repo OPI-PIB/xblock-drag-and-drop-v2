@@ -4,9 +4,13 @@
 }
 .modal-window .drag-builder  {
     width: 100%;
-    height: calc(100% - 60px);
+    height: calc(100% - 56px);
     position: absolute;
     overflow-y: scroll;
+}
+
+.xblock--drag-and-drop--editor {
+    margin-bottom: 0 !important;
 }
 
 /*** Drop Target ***/
@@ -115,7 +119,7 @@
 
 .xblock--drag-and-drop--editor .target-image-form .background-auto .autozone-layout,
 .xblock--drag-and-drop--editor .target-image-form .background-auto .autozone-size {
-    width: 4em;
+    width: 5em;
 }
 
 .xblock--drag-and-drop--editor input,
@@ -254,7 +258,7 @@
 }
 
 .xblock--drag-and-drop--editor .items-form .item-width {
-    width: 50px;
+    width: 5em;
 }
 
 .xblock--drag-and-drop--editor .items-form textarea {
@@ -289,25 +293,32 @@
 
 /** Buttons **/
 .xblock--drag-and-drop--editor .btn {
-    background-color: #1d5280;
-    color: #fff;
-    border: 1px solid #156ab4;
-    border-radius: 6px;
+    background-color: #fff;
+    color: #B43F37;
+    border: 1px solid #B43F37;
     padding: 5px 10px;
 }
 
 .xblock--drag-and-drop--editor .btn:hover,
 .xblock--drag-and-drop--editor .btn:focus {
-    background-color: #296ba5;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.5);
+    background-color: #B43F37;
+    border: 1px solid #B43F37;
+    color: #fff;
 }
 
 .xblock--drag-and-drop--editor .remove-zone,
-.xblock--drag-and-drop--editor .remove-item {
+.xblock--drag-and-drop--editor .remove-item,
+.xblock--drag-and-drop--editor .remove-zone:hover,
+.xblock--drag-and-drop--editor .remove-item:hover,
+.xblock--drag-and-drop--editor .remove-zone:focus,
+.xblock--drag-and-drop--editor .remove-item:focus   {
     float: right;
-    padding: 3px;
-    border-radius: 12px;
+    background-color: unset;
+    border: unset;
+    padding: 0;
+    color: #B43F37;
 }
+
 .rtl .xblock--drag-and-drop--editor .remove-zone,
 .rtl .xblock--drag-and-drop--editor .remove-item {
     float: left;
@@ -320,10 +331,6 @@
     display: inline-block;
 }
 
-.xblock--drag-and-drop--editor .remove-zone .icon,
-.xblock--drag-and-drop--editor .remove-item .icon {
-    display: block;
-}
 
 .xblock--drag-and-drop--editor .tab .field-error {
     outline: none;
@@ -332,56 +339,6 @@
     -webkit-appearance: none;
 }
 
-.xblock--drag-and-drop--editor .icon.add:before {
-    content: '';
-    height: 10px;
-    width: 2px;
-    background-color: #fff;
-    position: relative;
-    display: inline;
-    float: left;
-    top: 2px;
-    left: 6px;
-}
-
-.xblock--drag-and-drop--editor .icon.add:after {
-    content: '';
-    height: 2px;
-    width: 10px;
-    background-color: #fff;
-    position: relative;
-    display: inline;
-    float: left;
-    top: 6px;
-    left: 0;
-}
-
-.xblock--drag-and-drop--editor .icon.remove:before {
-    content: '';
-    height: 10px;
-    width: 2px;
-    background-color: #fff;
-    position: relative;
-    display: inline;
-    float: left;
-    top: 2px;
-    left: 6px;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-}
-
-.xblock--drag-and-drop--editor .icon.remove:after {
-    content: '';
-    height: 2px;
-    width: 10px;
-    background-color: #fff;
-    position: relative;
-    display: inline;
-    float: left;
-    top: 6px;
-    left: 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
+.xblock--drag-and-drop--editor .text-center {
+    tex-aligin: center;
 }
