@@ -421,13 +421,14 @@ function DragAndDropTemplates(configuration) {
 
                 spinner: ctx.show_answer_spinner
             };
-            showAnswerButton = sidebarButtonTemplate(
+/*            showAnswerButton = sidebarButtonTemplate(
                 "show-answer-button",
                 "fa-info-circle",
                 gettext('Show Answer'),
                 options
                 
             );
+*/            
 
         }
         var go_to_beginning_button_class = 'go-to-beginning-button';
